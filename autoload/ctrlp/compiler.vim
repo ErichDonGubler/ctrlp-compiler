@@ -5,7 +5,7 @@ let g:loaded_ctrlp_compiler = 1
 
 let s:compiler_var = {
 	\ 'init': 'ctrlp#compiler#init()',
-	\ 'accept': 'ctrlp#cmdline#accept',
+	\ 'accept': 'ctrlp#compiler#accept',
 	\ 'lname': 'compiler',
 	\ 'sname': 'compiler',
 	\ 'type': 'line',
@@ -19,30 +19,38 @@ else
 endif
 
 function! ctrlp#compiler#get_compilers()
-	let compilers_blob
-	redir => compilers_blob
-	:compiler
+	let l:compilers_blob = ''
+	redir => l:compilers_blob
+	:silent :compiler
 	redir END
-	let compilers = split(compilers, '\r')
-	call map(ctrlp#compiler#extract_compiler_string_from_compiler_path, compilers)
-	return compilers
+	let l:compilers = split(l:compilers_blob, '\n')
+	call map(l:compilers, function('ctrlp#compiler#extract_compiler_string_from_compiler_path'))
+	return l:compilers
 endfun
 
-function! ctrlp#compiler#extract_compiler_string_from_compiler_path(path)
-	let extracted = fnamemodify(path, ':t:r')
-	if empty(extracted)
-		throw 'ctrlp-compiler internal error: no compiler recognized into ``"' . path .'"'
+function! ctrlp#compiler#extract_compiler_string_from_compiler_path(index, path)
+	" echom 'Got path: ' . a:path
+	let l:extracted = fnamemodify(a:path, ':t:r')
+	if empty(l:extracted)
+		throw 'ctrlp-compiler internal error: no compiler recognized into ``"' . a:path .'"'
 	endif
+	" echom 'Extracted: ' . l:extracted
+	return l:extracted
 endfun
 
 function! ctrlp#compiler#init()
-	let compilers = ctrlp#compiler#get_compilers()
-	return compilers
+	let l:compilers = ctrlp#compiler#get_compilers()
+	return l:compilers
 endfunction
 
-function! ctrlp#compiler#accept(compiler)
-	exec ':compiler ' . compiler
-	echom 'Set compiler to ' . compiler
+function! ctrlp#compiler#accept(mode, compiler)
+	call execute('compiler ' . a:compiler)
+	call ctrlp#exit()
+	echom 'Compiler was set to "' . a:compiler . '"'
 endfun
 
+let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
+function! ctrlp#compiler#id()
+	return s:id
+endfun
 
