@@ -29,12 +29,10 @@ function! ctrlp#compiler#get_compilers()
 endfun
 
 function! ctrlp#compiler#extract_compiler_string_from_compiler_path(index, path)
-	" echom 'Got path: ' . a:path
 	let l:extracted = fnamemodify(a:path, ':t:r')
 	if empty(l:extracted)
 		throw 'ctrlp-compiler internal error: no compiler recognized into ``"' . a:path .'"'
 	endif
-	" echom 'Extracted: ' . l:extracted
 	return l:extracted
 endfun
 
