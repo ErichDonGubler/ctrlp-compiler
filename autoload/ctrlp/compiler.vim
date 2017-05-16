@@ -44,9 +44,9 @@ function! ctrlp#compiler#init()
 endfunction
 
 function! ctrlp#compiler#accept(mode, compiler)
-	call execute('compiler ' . a:compiler)
+	exec 'compiler! ' . a:compiler
+	make
 	call ctrlp#exit()
-	echom 'Compiler was set to "' . a:compiler . '"'
 endfun
 
 let s:id = g:ctrlp_builtins + len(g:ctrlp_ext_vars)
