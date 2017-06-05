@@ -1,0 +1,13 @@
+*ctrlp-compiler.txt*	A CtrlP plugin for compilers recognized by Vim.
+
+Author: Erich Gubler <erichdongubler@gmail.com>
+
+Contents:
+	Description
+	Commands
+
+==============================================================================
+SOURCE AND ISSUE TRACKER			*ctrlp-compiler-source*
+
+https://github.com/erichdongubler/ctrlp-compiler
+
